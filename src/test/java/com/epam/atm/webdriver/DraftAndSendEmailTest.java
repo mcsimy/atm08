@@ -4,6 +4,7 @@ import com.epam.atm.Utils;
 import com.epam.atm.pages.ComposePage;
 import com.epam.atm.pages.HomePage;
 import com.epam.atm.pages.InboxPage;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -21,9 +22,9 @@ public class DraftAndSendEmailTest extends BaseTest {
         ComposePage composePage = logIn().clickComposeButton();
 
         subjectText = Utils.generateRandomString(12);
-        composePage.fillToTextfield(TO_TEXT)
-                .fillSubjectTextfield(subjectText)
-                .fillBodyTextarea(BODY_TEXT)
+        composePage.fillToTextField(TO_TEXT)
+                .fillSubjectTextField(subjectText)
+                .fillBodyTextArea(BODY_TEXT)
                 .clickSaveButton()
                 .clickDraftsButton()
                 .clickDraftsItem();
@@ -61,7 +62,11 @@ public class DraftAndSendEmailTest extends BaseTest {
                 .clickCheckBoxOfEmail();
 
         subjectText = inboxPage.getSubjectOfFirstEmailInList();
-        inboxPage.clickMoveButtonAndSelectInbox();
+        new Actions(driver).sendKeys("v").build().perform();
+        inboxPage.clickInboxInMoveOption();
+        inboxPage = inboxPage.clickInboxMenuOption();
+        inboxPage.clickCheckBoxOfEmail()
+                .dragAndDropElement(inboxPage.getInboxItem(), inboxPage.getSentMenuItem());
     }
 
     private InboxPage logIn(){

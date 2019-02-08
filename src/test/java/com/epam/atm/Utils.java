@@ -1,15 +1,19 @@
 package com.epam.atm;
 
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.By;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 
 
+import java.io.File;
 import java.util.List;
+import java.util.logging.Logger;
+
+import static okhttp3.internal.Internal.instance;
 
 public class Utils {
     private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final String PATH_TO_SCREENSHOT_FOLDER = ".//screenshots";
+//    private Logger log = (Logger) Logger.getLogger(Utils.class);
 
     public static String generateRandomString(int count){
         StringBuilder builder = new StringBuilder();
@@ -37,18 +41,41 @@ public class Utils {
         return false;
     }
 
-    public static boolean tryToClickNumberOfTimes(WebDriver driver, int clicks, By locator){
+    public static boolean tryToClickNumberOfTimes(int clicks, WebElement element){
         boolean result = false;
         int attempts = 0;
         while(attempts < clicks) {
             try {
-                driver.findElement(locator).click();
+                element.click();
                 result = true;
                 break;
-            } catch(StaleElementReferenceException e) {
+            } catch(ElementNotVisibleException e) {
             }
             attempts++;
         }
         return result;
     }
+
+    public static WebElement findVisibleElementFromList(List<WebElement> list){
+        for(WebElement element : list){
+            if(element.isDisplayed()){
+                return element;
+            }
+        }
+        return null;
+    }
+
+//
+//    public static void takeScreenshot(){
+//        try{
+//            File screenshot= ((TakesScreenshot)instance).getScreenshotAs(OutputType.FILE);
+//            FileUtils.copyFileToDirectory(screenshot, new File(PATH_TO_SCREENSHOT_FOLDER));
+//            Logger.html
+//        ("Screenshot was taken <a href='screenshot/" + screenshot.getName() + "'>"
+//            + screenshot.getName() + "</a>");
+//        }
+//        catch (Exception e){
+//            Logger.getErr
+//        }
+//    }
 }
