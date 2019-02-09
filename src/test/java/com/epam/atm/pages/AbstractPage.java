@@ -1,5 +1,6 @@
 package com.epam.atm.pages;
 
+import com.epam.atm.Utils.DriverSingleton;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -12,7 +13,7 @@ public class AbstractPage {
     private static final long WAIT_FOR_ELEMENT_SECONDS = 10;
 
     public AbstractPage(WebDriver driver){
-        this.driver = driver;
+        this.driver = DriverSingleton.getWebDriverInstance();
     }
 
     protected void waitForElementClickable(WebElement webElement){

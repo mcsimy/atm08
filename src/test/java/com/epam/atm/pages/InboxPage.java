@@ -1,6 +1,7 @@
 package com.epam.atm.pages;
 
-import com.epam.atm.Utils;
+import com.epam.atm.Utils.Scroller;
+import com.epam.atm.Utils.Utils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -8,6 +9,7 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import javax.rmi.CORBA.Util;
 import java.util.List;
 
 public class InboxPage extends AbstractPage {
@@ -61,6 +63,9 @@ public class InboxPage extends AbstractPage {
     @FindAll(@FindBy(xpath = "./descendant::span[contains(text(), 'Входящие')]"))
     private List<WebElement> inboxMenuItem;
 
+    @FindBy(xpath = "//div[@class='w-portal-footer']")
+    private WebElement footer;
+
     public InboxPage(WebDriver driver){
         super(driver);
         PageFactory.initElements(driver, this);
@@ -72,6 +77,8 @@ public class InboxPage extends AbstractPage {
     }
 
     public ComposePage clickDraftsItem(){
+        driver.navigate().refresh();
+        waitForElementClickable(draftsItem);
         draftsItem.click();
         return new ComposePage(driver);
     }
@@ -96,8 +103,10 @@ public class InboxPage extends AbstractPage {
     }
 
     public InboxPage flagNumberOfEmailFromList(int howMuchEmailsToMark){
+        driver.navigate().refresh();
         List<WebElement> listOfEmailFlags = allFlaggedEmailOnthePage;
         for (int i = 0; i < (howMuchEmailsToMark); i++){
+            waitForElementClickable(listOfEmailFlags.get(i));
             listOfEmailFlags.get(i).click();
         }
         return this;
@@ -149,12 +158,19 @@ public class InboxPage extends AbstractPage {
     public void dragAndDropElement(WebElement element, WebElement target){
         new Actions(driver).dragAndDrop(element, target).build().perform();
     }
+    
+    public void scrollDownToToTheFooter(){
+        Scroller.ScrollByVisibleElement(footer);
+        Utils.highlightElement(footer);
+    }
 
     public WebElement getInboxItem(){
+        Utils.highlightElement(draftsItem);
         return draftsItem;
     }
 
     public WebElement getSentMenuItem(){
+        Utils.highlightElement(sentMenuItem);
         return sentMenuItem;
     }
 }

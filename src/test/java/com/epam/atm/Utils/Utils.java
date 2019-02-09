@@ -1,19 +1,15 @@
-package com.epam.atm;
+package com.epam.atm.Utils;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
-
-
 import java.io.File;
 import java.util.List;
-import java.util.logging.Logger;
-
-import static okhttp3.internal.Internal.instance;
+import org.apache.log4j.Logger;
 
 public class Utils {
     private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private static final String PATH_TO_SCREENSHOT_FOLDER = ".//screenshots";
-//    private Logger log = (Logger) Logger.getLogger(Utils.class);
+    private static final String PATH_TO_SCREENSHOT_FOLDER = "/Users/maksim_yermachonak/Desktop/Screenshots";
+    static Logger log = Logger.getLogger(Utils.class);
 
     public static String generateRandomString(int count){
         StringBuilder builder = new StringBuilder();
@@ -65,17 +61,25 @@ public class Utils {
         return null;
     }
 
-//
-//    public static void takeScreenshot(){
-//        try{
-//            File screenshot= ((TakesScreenshot)instance).getScreenshotAs(OutputType.FILE);
-//            FileUtils.copyFileToDirectory(screenshot, new File(PATH_TO_SCREENSHOT_FOLDER));
-//            Logger.html
-//        ("Screenshot was taken <a href='screenshot/" + screenshot.getName() + "'>"
-//            + screenshot.getName() + "</a>");
-//        }
-//        catch (Exception e){
-//            Logger.getErr
-//        }
-//    }
+    public static void highlightElement(WebElement element)
+    {
+        String bg = element.getCssValue("background");
+        JavascriptExecutor js = ((JavascriptExecutor) DriverSingleton.getWebDriverInstance());
+        js.executeScript("arguments[0].style.background = '" + "yellow" + "'", element);
+        takeScreenshot();
+        js.executeScript("arguments[0].style.background = '" + bg + "'", element);
+    }
+
+    public static void takeScreenshot(){
+        try{
+            log.info("Screenshot was taken");
+
+            File screenshot = ((TakesScreenshot) DriverSingleton.getWebDriverInstance())
+                    .getScreenshotAs(OutputType.FILE);
+            FileUtils.copyFileToDirectory(screenshot, new File(PATH_TO_SCREENSHOT_FOLDER));
+        }
+        catch (Exception e){
+            log.warn(e.getCause());
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package com.epam.atm.webdriver;
 
-import com.epam.atm.Utils;
+import com.epam.atm.Utils.Utils;
 import com.epam.atm.pages.ComposePage;
 import com.epam.atm.pages.HomePage;
 import com.epam.atm.pages.InboxPage;
@@ -8,18 +8,17 @@ import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import javax.security.auth.login.LoginContext;
+
 public class DraftAndSendEmailTest extends BaseTest {
-    private static final String ACCOUNT_NAME = "cfoxtrot";
-    private static final String DOMAIN_NAME = "@inbox.ru";
-    private static final String PASSWORD = "n5pYZu5dmeqHVzp";
     private static final String TO_TEXT = "max.yermachonak@gmail.com";
     private static final String BODY_TEXT = "Hi, I'm testing auto tests";
     private String subjectText;
 
-
     @Test
     public void createDraftAndSendItTest(){
-        ComposePage composePage = logIn().clickComposeButton();
+        HomePage homePage = new HomePage(driver);
+        ComposePage composePage = homePage.logIn().clickComposeButton();
 
         subjectText = Utils.generateRandomString(12);
         composePage.fillToTextField(TO_TEXT)
@@ -46,7 +45,9 @@ public class DraftAndSendEmailTest extends BaseTest {
     @Test
     public void flagEmailsAndFilterByIt(){
         int numberOfEmailsToFlag = 5;
-        InboxPage inboxPage = logIn()
+        HomePage homePage = new HomePage(driver);
+
+        InboxPage inboxPage = homePage.logIn()
                 .clickSentButton()
                 .flagNumberOfEmailFromList(numberOfEmailsToFlag)
                 .clickFlagsSortButton();
@@ -54,10 +55,11 @@ public class DraftAndSendEmailTest extends BaseTest {
                 "number of flagged emails and number of sorted emails is not equal");
     }
 
-    //test is not complete
     @Test
     public void moveSentEmailToInboxAndBackToSent(){
-        InboxPage inboxPage = logIn()
+        HomePage homePage = new HomePage(driver);
+
+        InboxPage inboxPage = homePage.logIn()
                 .clickSentButton()
                 .clickCheckBoxOfEmail();
 
@@ -67,14 +69,6 @@ public class DraftAndSendEmailTest extends BaseTest {
         inboxPage = inboxPage.clickInboxMenuOption();
         inboxPage.clickCheckBoxOfEmail()
                 .dragAndDropElement(inboxPage.getInboxItem(), inboxPage.getSentMenuItem());
-    }
-
-    private InboxPage logIn(){
-        InboxPage inboxPage = new HomePage(driver)
-                .fillAccountNameField(ACCOUNT_NAME)
-                .selectDomain(DOMAIN_NAME)
-                .fillPasswordField(PASSWORD)
-                .clickLoginButton();
-        return inboxPage;
+        inboxPage.scrollDownToToTheFooter();
     }
 }
