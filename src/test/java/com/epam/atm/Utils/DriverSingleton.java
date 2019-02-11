@@ -1,9 +1,13 @@
 package com.epam.atm.Utils;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 public class DriverSingleton {
     private static WebDriver instance;
@@ -19,20 +23,23 @@ public class DriverSingleton {
     }
 
     private static WebDriver init() {
-        WebDriver driver;
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("start-maximized");
-        driver = new ChromeDriver(chromeOptions);
-        return driver;
+        System.setProperty("webdriver.chrome.driver",
+                "src/test/resources/chromedriver");
 
-//        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe"); // do not forget to add chromedriver.exe file to src/main/resources/
-//        WebDriver driver = new ChromeDriver();
-////        WebDriver driver = new RemoteWebDriver(new URL("http://127.0.0.1:4444/wd/hub"), DesiredCapabilities.chrome());
-//        driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
-//        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//        driver.manage().window().maximize();
-//        return driver;
+        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+        desiredCapabilities.setBrowserName("chrome");
+        desiredCapabilities.setPlatform(Platform.MAC);
+        try {
+            WebDriver driver = new RemoteWebDriver(new URL("http://127.0.0.1:4444/wd/hub"), desiredCapabilities);
+            driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+            driver.manage().window().maximize();
+            return driver;
+        }
+        catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void kill() {
