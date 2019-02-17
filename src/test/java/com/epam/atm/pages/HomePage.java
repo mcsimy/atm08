@@ -1,5 +1,6 @@
 package com.epam.atm.pages;
 
+import com.epam.atm.models.User;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -49,10 +50,11 @@ public class HomePage extends AbstractPage {
     }
 
     public InboxPage logIn(){
+        User user = new User();
         InboxPage inboxPage = new HomePage(driver)
-                .fillAccountNameField(ACCOUNT_NAME)
-                .selectDomain(DOMAIN_NAME)
-                .fillPasswordField(PASSWORD)
+                .fillAccountNameField(user.getAccountName())
+                .selectDomain(user.getDomainName())
+                .fillPasswordField(user.getPassword())
                 .clickLoginButton();
         return inboxPage;
     }
