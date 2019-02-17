@@ -1,5 +1,6 @@
-package com.epam.atm.Utils;
+package com.epam.atm.utils;
 
+import com.epam.atm.drivers.DriverSingleton;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import java.io.File;

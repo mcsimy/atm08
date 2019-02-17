@@ -1,4 +1,4 @@
-package com.epam.atm.Utils;
+package com.epam.atm.drivers;
 
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
@@ -23,8 +23,7 @@ public class DriverSingleton {
     }
 
     private static WebDriver init() {
-        System.setProperty("webdriver.chrome.driver",
-                "src/test/resources/chromedriver");
+        System.setProperty("tests.chrome.driver", "src/test/resources/chromedriver");
 
         DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
         desiredCapabilities.setBrowserName("chrome");
@@ -44,13 +43,7 @@ public class DriverSingleton {
 
     public static void kill() {
         if (instance != null) {
-            try {
-                instance.quit();
-            } catch (Exception e) {
-                System.out.println("Cannot kill browser");
-            } finally {
-                instance = null;
-            }
+            instance.quit();
         }
     }
 }

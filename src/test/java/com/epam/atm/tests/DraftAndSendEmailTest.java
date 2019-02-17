@@ -1,6 +1,7 @@
-package com.epam.atm.webdriver;
+package com.epam.atm.tests;
 
-import com.epam.atm.Utils.Utils;
+import com.epam.atm.models.Email;
+import com.epam.atm.utils.Utils;
 import com.epam.atm.pages.ComposePage;
 import com.epam.atm.pages.HomePage;
 import com.epam.atm.pages.InboxPage;
@@ -8,29 +9,21 @@ import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import javax.security.auth.login.LoginContext;
-
 public class DraftAndSendEmailTest extends BaseTest {
-    private static final String TO_TEXT = "max.yermachonak@gmail.com";
-    private static final String BODY_TEXT = "Hi, I'm testing auto tests";
-    private String subjectText;
 
     @Test
     public void createDraftAndSendItTest(){
         HomePage homePage = new HomePage(driver);
         ComposePage composePage = homePage.logIn().clickComposeButton();
+        Email email = new Email();
 
-        subjectText = Utils.generateRandomString(12);
-        composePage.fillToTextField(TO_TEXT)
-                .fillSubjectTextField(subjectText)
-                .fillBodyTextArea(BODY_TEXT)
-                .clickSaveButton()
+        composePage.composeEmailAndSave(email.getToText(), email.getSubjectText(), email.getBodyText())
                 .clickDraftsButton()
                 .clickDraftsItem();
 
-        Assert.assertEquals(composePage.getToText(), TO_TEXT, "recipient email didn't match");
-        Assert.assertEquals(composePage.getSubjectText(), subjectText, "subject text didn't match");
-        Assert.assertEquals(composePage.getBodyText(), BODY_TEXT, "Body text didn't match");
+        Assert.assertEquals(composePage.getToText(), email.getToText(), "recipient email didn't match");
+        Assert.assertEquals(composePage.getSubjectText(), email.getSubjectText(), "subject text didn't match");
+        Assert.assertEquals(composePage.getBodyText(), email.getSubjectText(), "Body text didn't match");
 
         InboxPage inboxPage = composePage.clickSendButton()
                 .clickDraftsButton();
@@ -38,7 +31,7 @@ public class DraftAndSendEmailTest extends BaseTest {
         Assert.assertTrue(inboxPage.isNoDraftsMessageVisible(), "No drafts message was not displayed");
         inboxPage.clickSentButton();
 
-        Assert.assertTrue(Utils.isElementWithTextInList(inboxPage.getSentItems(), subjectText));
+        Assert.assertTrue(Utils.isElementWithTextInList(inboxPage.getSentItems(), email.getSubjectText()));
         inboxPage.logOut();
     }
 
@@ -63,7 +56,7 @@ public class DraftAndSendEmailTest extends BaseTest {
                 .clickSentButton()
                 .clickCheckBoxOfEmail();
 
-        subjectText = inboxPage.getSubjectOfFirstEmailInList();
+        String subjectText = inboxPage.getSubjectOfFirstEmailInList();
         new Actions(driver).sendKeys("v").build().perform();
         inboxPage.clickInboxInMoveOption();
         inboxPage = inboxPage.clickInboxMenuOption();

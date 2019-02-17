@@ -1,7 +1,7 @@
 package com.epam.atm.pages;
 
-import com.epam.atm.Utils.Scroller;
-import com.epam.atm.Utils.Utils;
+import com.epam.atm.utils.Scroller;
+import com.epam.atm.utils.Utils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -9,7 +9,6 @@ import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import javax.rmi.CORBA.Util;
 import java.util.List;
 
 public class InboxPage extends AbstractPage {
@@ -150,7 +149,7 @@ public class InboxPage extends AbstractPage {
         driver.navigate().refresh();
         WebElement inbox = Utils.findVisibleElementFromList(inboxMenuItem);
         waitForElementClickable(inbox);
-//        Utils.tryToClickNumberOfTimes(5, inbox);
+//        utils.tryToClickNumberOfTimes(5, inbox);
         inbox.click();
         return new InboxPage(driver);
     }

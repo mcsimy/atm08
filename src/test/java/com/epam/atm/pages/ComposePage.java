@@ -1,6 +1,6 @@
 package com.epam.atm.pages;
 
-import com.epam.atm.Utils.Utils;
+import com.epam.atm.utils.Utils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -59,7 +59,7 @@ public class ComposePage extends AbstractPage {
 
     public InboxPage clickDraftsButton(){
         draftsMenuItem.click();
-//        Assert.assertTrue(Utils.tryToClickNumberOfTimes(driver, 10, DRAFTS_MENU_ITEM_LOCATOR), "Couldn't click Drafts item");
+//        Assert.assertTrue(utils.tryToClickNumberOfTimes(driver, 10, DRAFTS_MENU_ITEM_LOCATOR), "Couldn't click Drafts item");
         return new InboxPage(driver);
     }
 
@@ -80,6 +80,14 @@ public class ComposePage extends AbstractPage {
 
     public ComposePage clickSendButton(){
         sendButton.click();
+        return this;
+    }
+
+    public ComposePage composeEmailAndSave(String to, String subject, String body){
+        this.fillToTextField(to)
+                .fillSubjectTextField(subject)
+                .fillBodyTextArea(body)
+                .clickSaveButton();
         return this;
     }
 }

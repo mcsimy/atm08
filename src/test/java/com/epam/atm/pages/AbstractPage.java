@@ -1,8 +1,7 @@
 package com.epam.atm.pages;
 
-import com.epam.atm.Utils.DriverSingleton;
+import com.epam.atm.drivers.DriverSingleton;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
